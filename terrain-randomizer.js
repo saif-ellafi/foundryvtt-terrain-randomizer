@@ -8,10 +8,6 @@ async function terrainRandomizerZoneGen() {
         return;
     }
     var oldHide = game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide;
-    var oldAutoScale = game.user.getFlag('dice-so-nice', 'settings').autoscale;
-    var oldScale = game.user.getFlag('dice-so-nice', 'settings').scale;
-    var oldThrowingForce = game.user.getFlag('dice-so-nice', 'settings').throwingForce;
-
     let content = '';
     let areaSize = Roll.create('1d6');
     areaSize.roll();
@@ -53,9 +49,6 @@ async function terrainRandomizerZoneGen() {
     let colors = ['red', 'green', 'blue', 'purple', 'black', 'yellow'];
     let i = 1;
     game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide = 500000;
-    game.user.getFlag('dice-so-nice', 'settings').autoscale = false;
-    game.user.getFlag('dice-so-nice', 'settings').scale = 35;
-    game.user.getFlag('dice-so-nice', 'settings').throwingForce = 'weak';
     zoneSizes.forEach(function (z) {
         let zoneRoll = Roll.create(`${z}d6[${colors[i - 1]}]`);
         zoneRoll.roll();
@@ -64,21 +57,23 @@ async function terrainRandomizerZoneGen() {
     });
     Hooks.once('diceSoNiceRollComplete', () => {
         game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide = oldHide;
-        game.user.getFlag('dice-so-nice', 'settings').autoscale = oldAutoScale;
-        game.user.getFlag('dice-so-nice', 'settings').scale = oldScale;
-        game.user.getFlag('dice-so-nice', 'settings').throwingForce = oldThrowingForce;
         ChatMessage.create({
-            content: `<div><b>Draw zones!</b></div><button class="tr-clear-dice">Finished! - Hide Dice</button>`
+            content: `<div><b>Draw zones!</b></div><button class="tr-clear-dice">Click to Hide Zone Dice</button><em>or roll any dice</em>`
         }).then((chatMsg) => {
-            $(".tr-clear-dice").click(() => _trClearDice(chatMsg));
+            setTimeout(() => {$(".tr-clear-dice").click(() => _trClearDice(chatMsg))}, 250);
             setTimeout(() => {chatMsg.update({content: `<div><b>Zone Processed</b></div>`})}, 500000);
         });
     });
 }
 
+Hooks.on('renderChatLog', function() {
+    $(".tr-clear-dice").click(() => _trClearDice());
+});
+
 function _trClearDice(chatMsg) {
     game.dice3d.box.clearAll();
-    chatMsg.update({content: `<div><b>Zone Processed</b></div>`});
+    if (chatMsg)
+        chatMsg.update({content: `<div><b>Zone Processed</b></div>`});
 }
 
 async function _trTableLookup(tableName) {

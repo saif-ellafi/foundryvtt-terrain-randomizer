@@ -1,0 +1,32 @@
+{
+  "name": "foundryvtt-terrain-randomizer",
+  "version": "1.5.0",
+  "description": "A set of macros for playing with The Terrain Randomizer book with automated functions",
+  "main": "terrain-randomizer.js",
+  "scripts": {
+    "copy": "mkdir -p dist && cp ./terrain-randomizer.js dist/ && cp ./README.md dist/ && cp ./CHANGELOG.md dist/ && cp ./LICENSE.md dist/ && cp ./module.json dist/ && cp ./THANKS.txt dist/ && cp -r ./packs dist/",
+    "copyWin": "mkdir dist && copy module.json dist && copy terrain-randomizer.js dist && copy README.md dist && copy CHANGELOG.md dist && copy LICENSE.md dist && copy module.json dist && copy THANKS.txt dist && xcopy /Y /I packs dist\\packs",
+    "zip": "npm-build-zip --source=dist --destination=.",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saif-ellafi/foundryvtt-terrain-randomizer.git"
+  },
+  "keywords": [
+    "foundry",
+    "vtt",
+    "terrain",
+    "randomizer",
+    "rpg"
+  ],
+  "author": "JeansenVaars (Saif Ellafi)",
+  "license": "CUSTOM",
+  "bugs": {
+    "url": "https://github.com/saif-ellafi/foundryvtt-terrain-randomizer/issues"
+  },
+  "homepage": "https://github.com/saif-ellafi/foundryvtt-terrain-randomizer",
+  "devDependencies": {
+    "npm-build-zip": "^1.0.3"
+  }
+}

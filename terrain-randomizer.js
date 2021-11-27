@@ -7,6 +7,11 @@ async function terrainRandomizerZoneGen() {
         ui.notifications.warn("Please configure 3D Dice Settings in Dice So Nice! For the First Time");
         return;
     }
+    var oldHide = game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide;
+    var oldAutoScale = game.user.getFlag('dice-so-nice', 'settings').autoscale;
+    var oldScale = game.user.getFlag('dice-so-nice', 'settings').scale;
+    var oldThrowingForce = game.user.getFlag('dice-so-nice', 'settings').throwingForce;
+
     let content = '';
     let areaSize = Roll.create('1d6');
     areaSize.roll();
@@ -47,16 +52,21 @@ async function terrainRandomizerZoneGen() {
     }
     let colors = ['red', 'green', 'blue', 'purple', 'black', 'yellow'];
     let i = 1;
-    var oldHide = game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide;
     game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide = 500000;
+    game.user.getFlag('dice-so-nice', 'settings').autoscale = false;
+    game.user.getFlag('dice-so-nice', 'settings').scale = 35;
+    game.user.getFlag('dice-so-nice', 'settings').throwingForce = 'weak';
     zoneSizes.forEach(function (z) {
         let zoneRoll = Roll.create(`${z}d6[${colors[i - 1]}]`);
         zoneRoll.roll();
-        zoneRoll.toMessage({content: `<span style="color:${colors[i - 1]}">Zone ${i}: ${z === 4 ? 'Large' : z === 3 ? 'Medium' : 'Small'}(${z})<br>`});
+        zoneRoll.toMessage({content: `<span style="color:${colors[i - 1]}">Zone ${i}: ${z === 4 ? 'Large' : z === 3 ? 'Medium' : 'Small'} (${z})<br>`});
         i += 1;
     });
     Hooks.once('diceSoNiceRollComplete', () => {
         game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide = oldHide;
+        game.user.getFlag('dice-so-nice', 'settings').autoscale = oldAutoScale;
+        game.user.getFlag('dice-so-nice', 'settings').scale = oldScale;
+        game.user.getFlag('dice-so-nice', 'settings').throwingForce = oldThrowingForce;
         ChatMessage.create({
             content: `<div><b>Draw zones!</b></div><button class="tr-clear-dice">Finished! - Hide Dice</button>`
         }).then((chatMsg) => {

@@ -75,10 +75,13 @@ async function terrainRandomizerZoneGen() {
             content: `<div><b>Draw zones!</b></div><button>Click to Hide Zone Dice</button>`
         });
         let rollingHtml = await chatMsg.getHTML();
-        if ($("#chat-popout").length)
+        if ($("#chat-popout").length) {
             $("#chat-popout").find("#chat-log").append(rollingHtml);
-        else
+            Object.values(ui.windows).find(w => w.constructor.name === 'ChatLog').scrollBottom();
+        } else {
             $("#chat").find("#chat-log").append(rollingHtml);
+            ui.chat.scrollBottom();
+        }
         rollingHtml.find('button').click(() => _trClearDice(rollingHtml));
         // on the next roll, restart scale if we are doing anything else than generating a zone
         Hooks.once('diceSoNiceRollStart', () => {

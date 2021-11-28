@@ -1,3 +1,6 @@
+### 1.1.2
+* Fixed chat not scrolling to bottom when zone generator adds the clear button
+
 ### 1.1.1
 * Fixed wrong jquery selectors
 

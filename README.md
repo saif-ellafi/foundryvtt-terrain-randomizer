@@ -34,12 +34,8 @@ and this module is redistributed with _appropriate permission from author_ **Jos
 **Recommendations:** 
 1. Use Foundry's free-form drawing tools and text tools to take notes
 2. Draw and proceed in the order zones as in the chat
-3. Use solid fill colors and separated colors for zones
-4. Use Dice So Nice! Settings as:
-   1. Autoscale: off
-   2. Scale: 30
-   3. Force: weak
-5. Use **Minimal UI** for getting more space on your screen and minimize the chat while drawing
+3. Use solid fill colors and separated colors for zones 
+4. Use **Minimal UI** for getting more space on your screen and minimize the chat while drawing
 
 ![example.png](example.png)
 

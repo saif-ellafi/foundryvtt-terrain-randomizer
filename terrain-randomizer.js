@@ -76,9 +76,9 @@ async function terrainRandomizerZoneGen() {
         });
         let rollingHtml = await chatMsg.getHTML();
         if ($("#chat-popout").length)
-            $("#chat-popout").find("ol").append(rollingHtml);
+            $("#chat-popout").find("#chat-log").append(rollingHtml);
         else
-            $("#chat").find("ol").append(rollingHtml);
+            $("#chat").find("#chat-log").append(rollingHtml);
         rollingHtml.find('button').click(() => _trClearDice(rollingHtml));
         // on the next roll, restart scale if we are doing anything else than generating a zone
         Hooks.once('diceSoNiceRollStart', () => {
@@ -93,10 +93,6 @@ async function terrainRandomizerZoneGen() {
         _terrainRandomizerInZoneGen = false;
     });
 }
-
-Hooks.on('renderChatLog', function() {
-    $(".tr-clear-dice").click(() => _trClearDice());
-});
 
 function _trClearDice(chatHtml) {
     game.dice3d.box.clearAll();

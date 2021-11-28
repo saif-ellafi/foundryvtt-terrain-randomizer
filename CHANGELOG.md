@@ -1,3 +1,6 @@
+### 1.1.1
+* Fixed wrong jquery selectors
+
 ### 1.1.0
 * Clear previous zone rolls if macro is triggered again
 * Reduced canvas for 3D dice on Zone Generation rolls

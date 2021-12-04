@@ -10,8 +10,8 @@ async function terrainRandomizerZoneGen() {
         return;
     }
     _terrainRandomizerInZoneGen = true;
-    var oldHide = game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide;
-    var oldForce = game.dice3d.box.throwingForce;
+    const oldHide = game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide;
+    const oldForce = game.dice3d.box.throwingForce;
     // Terrain Randomizer relies on these scale values in order
     // to keep the dice closer to the center of the canvas
     game.dice3d.box.scene.scale.x = 0.4;
@@ -19,7 +19,7 @@ async function terrainRandomizerZoneGen() {
     game.dice3d.box.scene.scale.z = 0.4;
     let content = '';
     let areaSize = Roll.create('1d6');
-    areaSize.roll();
+    areaSize.roll({async: false});
     let zones;
     if (areaSize.total <= 3) {
         zones = Roll.create('1d3');
@@ -31,11 +31,11 @@ async function terrainRandomizerZoneGen() {
         zones = Roll.create('1d6');
         content += `<h2>Area Size: ${'Large'}</h2>`;
     }
-    zones.roll();
+    zones.roll({async: false});
 
     function getSize() {
         size = Roll.create('1d6');
-        size.roll();
+        size.roll({async: false});
         if (size.total === 1)
             return 0
         else if (size.total === 6)
@@ -62,7 +62,7 @@ async function terrainRandomizerZoneGen() {
     game.dice3d.box.throwingForce = 'strong';
     zoneSizes.forEach(function (z) {
         let zoneRoll = Roll.create(`${z}d6[${colors[i - 1]}]`);
-        zoneRoll.roll();
+        zoneRoll.roll({async: false});
         game.dice3d.showForRoll(zoneRoll).then(() => Hooks.call('diceSoNiceRollComplete'));
         content += `<span style="color:${textColors[i - 1]}">Zone ${i}: ${z === 4 ? 'Large' : z === 3 ? 'Medium' : 'Small'} (${z})<br>`;
         i += 1;

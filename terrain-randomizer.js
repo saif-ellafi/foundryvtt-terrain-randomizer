@@ -61,10 +61,8 @@ async function terrainRandomizerZoneGen() {
     game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide = 500000;
     game.dice3d.box.throwingForce = 'strong';
     zoneSizes.forEach(function (z) {
-        console.log(`${z}d6[${colors[i - 1]}]`);
         let zoneRoll = Roll.create(`${z}d6[${colors[i - 1]}]`);
         zoneRoll.roll({async: false});
-        console.log(zoneRoll);
         game.dice3d.showForRoll(zoneRoll).then(() => Hooks.call('diceSoNiceRollComplete'));
         content += `<span style="color:${textColors[i - 1]}">Zone ${i}: ${z === 4 ? 'Large' : z === 3 ? 'Medium' : 'Small'} (${z})<br>`;
         i += 1;

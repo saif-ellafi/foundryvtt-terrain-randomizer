@@ -112,9 +112,9 @@ async function terrainRandomizerHazardGen() {
         <h2>Zone Decorator</h2>
         <b>Affects</b>: ${(await (await _trTableLookup('TR - AoE')).roll()).results[0].getChatText()}<br>
         <b>Is a</b>: ${decoType}<br>
-        <b>Of</b>: ${(await (await _trTableLookup('TR - Subtype')).roll()).results[0].getChatText()}<br>
         <b>With potency</b>: ${(await (await _trTableLookup('TR - Potency')).roll()).results[0].getChatText()}<br>
         <b>That triggers</b>: ${(await (await _trTableLookup('TR - Temporality')).roll()).results[0].getChatText()}<br>
+        ${decoType.toLowerCase().includes('distraction') ? `<b>Distraction Type</b>: ${(await (await _trTableLookup('TR - Subtype')).roll()).results[0].getChatText()}<br>` : ''}
         ${decoType.toLowerCase().includes('hazard') ? `<b>Hazard Special</b>: ${(await (await _trTableLookup('TR - Hazard')).roll()).results[0].getChatText()}<br>` : ''}
     `, whisper: [game.users.contents.find(u => u.isGM).id]})
 }

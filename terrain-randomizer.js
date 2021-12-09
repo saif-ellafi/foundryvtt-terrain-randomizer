@@ -67,21 +67,25 @@ async function terrainRandomizerZoneGen() {
         content += `<span style="color:${textColors[i - 1]}">Zone ${i}: ${z === 4 ? 'Large' : z === 3 ? 'Medium' : 'Small'} (${z})<br>`;
         i += 1;
     });
-    await ChatMessage.create({content: content, whisper: [game.users.contents.find(u => u.isGM).id]});
+    const whisper = ui.chat.getData().rollMode !== 'roll' ? [game.user] : undefined;
+    await ChatMessage.create({content: content, whisper: whisper});
     Hooks.once('diceSoNiceRollComplete', async () => {
         game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide = oldHide;
         game.dice3d.box.throwingForce = oldForce;
         const chatMsg = new ChatMessage({
-            content: `<div><b>Draw zones!</b></div><button>Click to Hide Zone Dice</button>`
+            content: `<div><b>Draw zones!</b></div><button>Click to Hide Zone Dice</button>`,
+            whisper: whisper
         });
-        let rollingHtml = await chatMsg.getHTML();
-        if ($("#chat-popout").length) {
-            $("#chat-popout").find("#chat-log").append(rollingHtml);
-            Object.values(ui.windows).find(w => w.constructor.name === 'ChatLog').scrollBottom();
-        } else {
-            $("#chat").find("#chat-log").append(rollingHtml);
-            ui.chat.scrollBottom();
+        const popOutChat = Object.values(ui.windows).find(w => w.constructor.name === 'ChatLog');
+        if (popOutChat) {
+            const rollingFloatingHtml = await chatMsg.getHTML();
+            popOutChat.element.find("#chat-log").append(rollingFloatingHtml);
+            popOutChat.scrollBottom();
+            rollingFloatingHtml.find('button').click(() => _trClearDice(rollingFloatingHtml));
         }
+        const rollingHtml = await chatMsg.getHTML();
+        ui.chat.element.find("#chat-log").append(rollingHtml);
+        ui.chat.scrollBottom();
         rollingHtml.find('button').click(() => _trClearDice(rollingHtml));
         // on the next roll, restart scale if we are doing anything else than generating a zone
         Hooks.once('diceSoNiceRollStart', () => {
@@ -108,6 +112,7 @@ async function _trTableLookup(tableName) {
 
 async function terrainRandomizerHazardGen() {
     const decoType = (await (await _trTableLookup('TR - Type')).roll()).results[0].getChatText();
+    const whisper = ui.chat.getData().rollMode !== 'roll' ? [game.user] : undefined;
     ChatMessage.create({content: `
         <h2>Zone Decorator</h2>
         <b>Affects</b>: ${(await (await _trTableLookup('TR - AoE')).roll()).results[0].getChatText()}<br>
@@ -116,5 +121,5 @@ async function terrainRandomizerHazardGen() {
         <b>That triggers</b>: ${(await (await _trTableLookup('TR - Temporality')).roll()).results[0].getChatText()}<br>
         ${decoType.toLowerCase().includes('distraction') ? `<b>Distraction Type</b>: ${(await (await _trTableLookup('TR - Subtype')).roll()).results[0].getChatText()}<br>` : ''}
         ${decoType.toLowerCase().includes('hazard') ? `<b>Hazard Special</b>: ${(await (await _trTableLookup('TR - Hazard')).roll()).results[0].getChatText()}<br>` : ''}
-    `, whisper: [game.users.contents.find(u => u.isGM).id]})
+    `, whisper: whisper})
 }

@@ -1,6 +1,8 @@
 ### 1.1.3
 * Support for V9
 * Distraction type now only shows on distraction decorators
+* Fixed an issue with transient message in floating chat windows
+* Messages should be GM only if the chat is configured as non-public
 
 ### 1.1.2
 * Fixed chat not scrolling to bottom when zone generator adds the clear button

@@ -111,15 +111,123 @@ async function _trTableLookup(tableName) {
 }
 
 async function terrainRandomizerHazardGen() {
-    const decoType = (await (await _trTableLookup('TR - Type')).roll()).results[0].getChatText();
-    const whisper = ui.chat.getData().rollMode !== 'roll' ? [game.user] : undefined;
-    ChatMessage.create({content: `
-        <h2>Zone Decorator</h2>
-        <b>Affects</b>: ${(await (await _trTableLookup('TR - AoE')).roll()).results[0].getChatText()}<br>
-        <b>Is a</b>: ${decoType}<br>
-        <b>With potency</b>: ${(await (await _trTableLookup('TR - Potency')).roll()).results[0].getChatText()}<br>
-        <b>That triggers</b>: ${(await (await _trTableLookup('TR - Temporality')).roll()).results[0].getChatText()}<br>
-        ${decoType.toLowerCase().includes('distraction') ? `<b>Distraction Type</b>: ${(await (await _trTableLookup('TR - Subtype')).roll()).results[0].getChatText()}<br>` : ''}
-        ${decoType.toLowerCase().includes('hazard') ? `<b>Hazard Special</b>: ${(await (await _trTableLookup('TR - Hazard')).roll()).results[0].getChatText()}<br>` : ''}
-    `, whisper: whisper})
+    const decoGenDialog = `
+    <form>
+
+    <div>
+        <label for="decorationAmount" style="margin-right:30px;">How Many:</label>
+        <select name="decorationAmount" id="tr-deco-count" style="margin-bottom:10px;width:260px"">
+            <option value="one" selected>Just One</option>
+            <option value="simple">Simple (1d2)</option>
+            <option value="medium">Medium (1d4)</option>
+            <option value="complex">Complex (1d6)</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="hazardGenerator" style="margin-right:19px;">Hazard Type:</label>
+        <select name="hazardGenerator" id="tr-hazard-gen" style="margin-bottom:10px;width:260px"">
+            <option value="table" selected>Random</option>
+            <option value="Hazard">Hazard</option>
+            <option value="Block">Block</option>
+            <option value="Distraction">Distraction</option>
+            <option value="Hazard & Block">Hazard & Block</option>
+            <option value="Hazard & Distraction">Hazard & Distraction</option>
+            <option value="Block & Distraction">Block & Distraction</option>
+            <option value="Hazard & Block & Distraction">Hazard & Block & Distraction</option>
+        </select>
+    </div>
+
+    <div style="margin-bottom:5px;">
+        <label for="decoTable1">Random Table 1:</label>
+        <input name="decoTable1" id="tr-descriptor1-table" style="width:260px;" placeholder="Table Name">
+    </div>
+
+    <div style="margin-bottom:5px;">
+        <label for="decoTable2">Random Table 2:</label>
+        <input name="decoTable2" id="tr-descriptor2-table" style="width:260px;" placeholder="Table Name">
+    </div>
+
+    </form>
+    `
+    let dialogue = new Dialog({
+        title: `Terrain Decorator`,
+        content: decoGenDialog,
+        render: (html) => {
+            const table1 = game.user.getFlag('terrain-randomizer', 'tr-random-table-1');
+            const table2 = game.user.getFlag('terrain-randomizer', 'tr-random-table-2');
+            if (table1)
+                html.find("#tr-descriptor1-table").val(table1);
+            if (table2)
+                html.find("#tr-descriptor2-table").val(table2);
+        },
+        buttons: {
+            submit: {
+                icon: '<i class="fas fa-comments"></i>',
+                label: 'Generate Hazard',
+                callback: async (html) => {
+                    const whisper = ui.chat.getData().rollMode !== 'roll' ? [game.user] : undefined;
+                    let decoCount;
+                    const decoCountChoice = html.find("#tr-deco-count").val();
+                    switch (decoCountChoice) {
+                        case 'one': {
+                            decoCount = 1;
+                            break;
+                        }
+                        case 'simple': {
+                            decoCount = Roll.create('1d2').roll({async: true}).total;
+                            break;
+                        }
+                        case 'medium': {
+                            decoCount = Roll.create('1d4').roll({async: true}).total;
+                            break;
+                        }
+                        case 'complex': {
+                            decoCount = Roll.create('1d6').roll({async: true}).total;
+                            break;
+                        }
+                    }
+
+                    const decoTypeChoice = html.find("#tr-hazard-gen").val();
+                    const decoTable1name = html.find("#tr-descriptor1-table").val();
+                    const decoTable2name = html.find("#tr-descriptor2-table").val();
+                    if (decoTable1name.length)
+                        game.user.setFlag('terrain-randomizer', 'tr-random-table-1', decoTable1name);
+                    if (decoTable2name.length)
+                        game.user.setFlag('terrain-randomizer', 'tr-random-table-2', decoTable2name);
+
+                    let i = 0;
+                    ChatMessage.create({content: `Generating ${decoCount} Decorations!`});
+                    while (i < decoCount) {
+                        i += 1;
+                        let decoType;
+                        if (!decoTypeChoice?.length || decoTypeChoice === 'table')
+                            decoType = (await (await _trTableLookup('TR - Type')).roll()).results[0].getChatText();
+                        else
+                            decoType = decoTypeChoice;
+                        let table1output;
+                        let table2output;
+                        if (decoTable1name.length)
+                            table1output = (await game.tables.contents.find(t => t.name === decoTable1name.trim())?.draw({displayChat: false}))?.results[0].getChatText();
+                        if (decoTable2name.length)
+                            table2output = (await game.tables.contents.find(t => t.name === decoTable2name.trim())?.draw({displayChat: false}))?.results[0].getChatText();
+                        ChatMessage.create({content: `
+                        <h2>Zone Decoration (${i})</h2>
+                        <div><u>${decoType}</u></div>
+                        <div><b>Affects</b>: ${(await (await _trTableLookup('TR - AoE')).roll()).results[0].getChatText()}</div>
+                        <div><b>With potency</b>: ${(await (await _trTableLookup('TR - Potency')).roll()).results[0].getChatText()}</div>
+                        <div><b>That triggers</b>: ${(await (await _trTableLookup('TR - Temporality')).roll()).results[0].getChatText()}</div>
+                        ${decoType.toLowerCase().includes('distraction') ? `<div><b>Distraction Type</b>: ${(await (await _trTableLookup('TR - Subtype')).roll()).results[0].getChatText()}</div>` : ''}
+                        ${decoType.toLowerCase().includes('hazard') ? `<div><b>Hazard Special</b>: ${(await (await _trTableLookup('TR - Hazard')).roll()).results[0].getChatText()}</div>` : ''}
+                        ${table1output?.length ? `<div><b>Property 1:</b> ${table1output}</div>` : ''}
+                        ${table2output?.length ? `<div><b>Property 2:</b> ${table2output}</div>` : ''}
+                    `, whisper: whisper})
+                    }
+                }
+            }
+        },
+        default: "submit"
+    })
+
+    dialogue.render(true)
 }

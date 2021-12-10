@@ -29,18 +29,27 @@ and this module is redistributed with _appropriate permission from author_ **Jos
 1. Fully automated Zone Generator using 3D dice that stay on screen until finished
    1. The logic of the book will be applied to procedurally generate Zones and characteristics
    2. Press "Finished" button to clear the dice from screen! (Expires automatically after 5 minutes)
-   3. It does NOT include elevation calculation as those require your inputs and creativity
+   3. Use your imagination for the elevations :)
 2. Decoration generator that produces detailed hazards, blocks and other challenges for your zones!
    1. Following Decoration creation, the Decorations Macro will produce Zone features automatically!
-   2. It does NOT include detail tables as following the books guidelines to use your own instead!
+   2. Descriptor tables not included! You can use your own in 
+
+![img_2.png](img_2.png)
 
 **Recommendations:** 
 1. Use Foundry's free-form drawing tools and text tools to take notes
 2. Draw and proceed in the order zones as in the chat
-3. Use solid fill colors and separated colors for zones 
-4. Use **Minimal UI** for getting more space on your screen and minimize the chat while drawing
+3. Use solid fill colors and separated colors for zones
 
 ![example.png](example.png)
+
+## Check out my other modules!
+
+* [Mythic GME Tools](https://github.com/saif-ellafi/foundryvtt-mythic-gme)
+* [Minimal UI](https://github.com/saif-ellafi/foundryvtt-minimal-ui)
+* [Window Controls](https://github.com/saif-ellafi/foundryvtt-window-controls)
+* [Scene Preview](https://github.com/saif-ellafi/foundryvtt-scene-preview)
+* [Super Select](https://github.com/saif-ellafi/foundryvtt-super-select)
 
 ## How to use
 
@@ -49,12 +58,6 @@ and this module is redistributed with _appropriate permission from author_ **Jos
 3. Open compendiums and drag The Terrain Randomizer macros into your hotbar! 
 
 **CUSTOMIZATION** - Macros use RollTable by a strict name. Import the tables from the compendium and customize them, and will be automatically used, so long the names are not changed!
-
-## To Do
-* Further customization of probabilities
-* Improve quality of life such as Dice so Nice temporary settings on the macro
-* Figure a way of disabling camera panning when touching screen edges
-* Figure a way of DIce so Nice to reduce the used size of canvas or fix dice location relative to the scene
 
 ## Author
 
@@ -77,14 +80,6 @@ Special thanks to the Community at the Discord Channel from [Mythic Game Master 
 ![JVLogo](logo-small-black.png)
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/V7V14D3AH)
-
-## Check out my other modules!
-
-* [Mythic GME Tools](https://github.com/saif-ellafi/foundryvtt-mythic-gme)
-* [Minimal UI](https://github.com/saif-ellafi/foundryvtt-minimal-ui)
-* [Window Controls](https://github.com/saif-ellafi/foundryvtt-window-controls)
-* [Scene Preview](https://github.com/saif-ellafi/foundryvtt-scene-preview)
-* [Super Select](https://github.com/saif-ellafi/foundryvtt-super-select)
 
 # License
 

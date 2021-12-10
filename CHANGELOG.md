@@ -1,3 +1,9 @@
+### 1.1.4
+* Terrain Decorator now allows random tables for descriptors
+* Terrain Decorator now allows customization of decorations to generate (one, simple, medium, complex)
+* Terrain Decorator now opens a dialog that lets user pick a specific hazard type. This is meant for hazard zones that are clarified later.
+* Improved overall chat messages
+
 ### 1.1.3
 * Support for V9
 * Distraction type now only shows on distraction decorators

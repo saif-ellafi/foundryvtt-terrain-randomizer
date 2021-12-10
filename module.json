@@ -6,11 +6,11 @@
     "JeansenVaars",
     "José Manuel Navarro"
   ],
-  "version": "1.1.3",
+  "version": "1.1.4",
   "minimumCoreVersion": "0.8.9",
   "url": "https://github.com/saif-ellafi/foundryvtt-terrain-randomizer.git",
   "manifest": "https://github.com/saif-ellafi/foundryvtt-terrain-randomizer/releases/latest/download/module.json",
-  "download": "https://github.com/saif-ellafi/foundryvtt-terrain-randomizer/releases/download/1.1.3/foundryvtt-terrain-randomizer_1.1.3.zip",
+  "download": "https://github.com/saif-ellafi/foundryvtt-terrain-randomizer/releases/download/1.1.4/foundryvtt-terrain-randomizer_1.1.4.zip",
   "compatibleCoreVersion": "9.235",
   "scripts": [
     "terrain-randomizer.js"

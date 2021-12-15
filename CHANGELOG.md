@@ -1,3 +1,6 @@
+### 1.1.5
+* Fixed a bug where dice colors were all same color in some systems (Thanks jamomancer for reporting it)
+
 ### 1.1.4
 * Terrain Decorator now allows random tables for descriptors
 * Terrain Decorator now allows customization of decorations to generate (one, simple, medium, complex)

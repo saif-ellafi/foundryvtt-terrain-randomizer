@@ -54,17 +54,23 @@ async function terrainRandomizerZoneGen() {
         else
             zoneSizes.push(4)
     }
-    let colors = ['red', 'green', 'blue', 'purple', 'black', 'fire'];
-    let textColors = ['red', 'green', 'blue', 'purple', 'black', 'orange'];
+    let colors = ['red', 'green', 'blue', 'purple', 'black', 'orange'];
     let i = 1;
     game.dice3d.box.clearAll();
     game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide = 500000;
     game.dice3d.box.throwingForce = 'strong';
     zoneSizes.forEach(function (z) {
-        let zoneRoll = Roll.create(`${z}d6[${colors[i - 1]}]`);
-        zoneRoll.roll({async: false});
+        let zoneRoll = Roll.create(`${z}d6`);
+        let diceRoll = zoneRoll.roll({async: false});
+        diceRoll.dice[0].options.appearance = {
+            colorset: 'custom',
+            background: colors[i-1],
+            outline: colors[i-1],
+            edge: colors[i-1],
+            system: 'standard'
+        }
         game.dice3d.showForRoll(zoneRoll).then(() => Hooks.call('diceSoNiceRollComplete'));
-        content += `<span style="color:${textColors[i - 1]}">Zone ${i}: ${z === 4 ? 'Large' : z === 3 ? 'Medium' : 'Small'} (${z})<br>`;
+        content += `<span style="color:${colors[i - 1]}">Zone ${i}: ${z === 4 ? 'Large' : z === 3 ? 'Medium' : 'Small'} (${z})<br>`;
         i += 1;
     });
     const whisper = ui.chat.getData().rollMode !== 'roll' ? [game.user] : undefined;

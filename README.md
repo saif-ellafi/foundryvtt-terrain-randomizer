@@ -1,5 +1,6 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/saif-ellafi/foundryvtt-terrain-randomizer/total?logo=GitHub) ![GitHub release (latest by date)](https://img.shields.io/github/downloads/saif-ellafi/foundryvtt-terrain-randomizer/latest/total) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/saif-ellafi/foundryvtt-terrain-randomizer) ![GitHub issues](https://img.shields.io/github/issues-raw/saif-ellafi/foundryvtt-terrain-randomizer)
 # Terrain Randomizer for FoundryVTT
+### _Created by: JeansenVaars_
 
 Set of macros for playing
 with [The Terrain Randomizer](https://www.drivethrurpg.com/product/359218/The-Terrain-Randomizer) in FoundryVTT.

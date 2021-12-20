@@ -1,6 +1,6 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/saif-ellafi/foundryvtt-terrain-randomizer/total?logo=GitHub) ![GitHub release (latest by date)](https://img.shields.io/github/downloads/saif-ellafi/foundryvtt-terrain-randomizer/latest/total) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/saif-ellafi/foundryvtt-terrain-randomizer) ![GitHub issues](https://img.shields.io/github/issues-raw/saif-ellafi/foundryvtt-terrain-randomizer)
 # Terrain Randomizer for FoundryVTT
-### _Created by: JeansenVaars_
+### _Created by: JeansenVaars_ - [Invite me to a Coffee](#by-jeansenvaars) :) if you enjoy this module!
 
 Set of macros for playing
 with [The Terrain Randomizer](https://www.drivethrurpg.com/product/359218/The-Terrain-Randomizer) in FoundryVTT.
@@ -11,8 +11,6 @@ _Dynamically improvise interesting battle maps and situational maps for your RPG
 The Terrain Randomizer book injects tactical depth with minimal player effort._
 
 This implementation relies on [Dice so Nice!](https://foundryvtt.com/packages/dice-so-nice) as a module dependency
-
-[Invite me to a Coffee](#by-jeansenvaars) :) if you enjoy my work!
 
 ![randomizer-example.gif](randomizer-example.gif)
 

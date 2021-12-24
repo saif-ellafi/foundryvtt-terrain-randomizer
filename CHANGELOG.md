@@ -1,3 +1,10 @@
+### 1.2.0
+* Can now select random range for zones layout in zone generator
+* Use dropdowns for random table selection in decorations
+* Fixed a bug with random decorators
+* Adjusted 3D dice size based on the scene canvas size
+* Tables and Macros are by default private to GM
+
 ### 1.1.5
 * Fixed a bug where dice colors were all same color in some systems (Thanks jamomancer for reporting it and JDW for helping!)
 

@@ -9,102 +9,181 @@ async function terrainRandomizerZoneGen() {
         ui.notifications.warn("Please configure 3D Dice Settings in Dice So Nice! For the First Time");
         return;
     }
-    _terrainRandomizerInZoneGen = true;
-    const oldHide = game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide;
-    const oldForce = game.dice3d.box.throwingForce;
-    // Terrain Randomizer relies on these scale values in order
-    // to keep the dice closer to the center of the canvas
-    game.dice3d.box.scene.scale.x = 0.4;
-    game.dice3d.box.scene.scale.y = 0.4;
-    game.dice3d.box.scene.scale.z = 0.4;
-    let content = '';
-    let areaSize = Roll.create('1d6');
-    areaSize.roll({async: false});
-    let zones;
-    if (areaSize.total <= 3) {
-        zones = Roll.create('1d3');
-        content += `<h2>Area Size: ${'Small'}</h2>`;
-    } else if (areaSize.total <= 5) {
-        zones = Roll.create('1d4');
-        content += `<h2>Area Size: ${'Medium'}</h2>`;
-    } else {
-        zones = Roll.create('1d6');
-        content += `<h2>Area Size: ${'Large'}</h2>`;
-    }
-    zones.roll({async: false});
 
-    function getSize() {
-        size = Roll.create('1d6');
-        size.roll({async: false});
-        if (size.total === 1)
-            return 0
-        else if (size.total === 6)
-            return 2
-        else
-            return 1
-    }
+    const zoneGenDialog = `
+    <form>
 
-    let zoneSizes = [];
-    for (let z = 0; z < zones.total; z++) {
-        zoneSize = getSize();
-        if (zoneSize === 0)
-            zoneSizes.push(2)
-        else if (zoneSize === 1)
-            zoneSizes.push(3)
-        else
-            zoneSizes.push(4)
-    }
-    let colors = ['red', 'green', 'blue', 'purple', 'black', 'orange'];
-    let i = 1;
-    game.dice3d.box.clearAll();
-    game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide = 500000;
-    game.dice3d.box.throwingForce = 'strong';
-    zoneSizes.forEach(function (z) {
-        let zoneRoll = Roll.create(`${z}d6`);
-        let diceRoll = zoneRoll.roll({async: false});
-        diceRoll.dice[0].options.appearance = {
-            colorset: 'custom',
-            background: colors[i-1],
-            outline: colors[i-1],
-            edge: colors[i-1],
-            system: 'standard'
-        }
-        game.dice3d.showForRoll(zoneRoll).then(() => Hooks.call('diceSoNiceRollComplete'));
-        content += `<span style="color:${colors[i - 1]}">Zone ${i}: ${z === 4 ? 'Large' : z === 3 ? 'Medium' : 'Small'} (${z})<br>`;
-        i += 1;
-    });
-    const whisper = ui.chat.getData().rollMode !== 'roll' ? [game.user] : undefined;
-    await ChatMessage.create({content: content, whisper: whisper});
-    Hooks.once('diceSoNiceRollComplete', async () => {
-        game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide = oldHide;
-        game.dice3d.box.throwingForce = oldForce;
-        const chatMsg = new ChatMessage({
-            content: `<div><b>Draw zones!</b></div><button>Click to Hide Zone Dice</button>`,
-            whisper: whisper
-        });
-        const popOutChat = Object.values(ui.windows).find(w => w.constructor.name === 'ChatLog');
-        if (popOutChat) {
-            const rollingFloatingHtml = await chatMsg.getHTML();
-            popOutChat.element.find("#chat-log").append(rollingFloatingHtml);
-            popOutChat.scrollBottom();
-            rollingFloatingHtml.find('button').click(() => _trClearDice(rollingFloatingHtml));
-        }
-        const rollingHtml = await chatMsg.getHTML();
-        ui.chat.element.find("#chat-log").append(rollingHtml);
-        ui.chat.scrollBottom();
-        rollingHtml.find('button').click(() => _trClearDice(rollingHtml));
-        // on the next roll, restart scale if we are doing anything else than generating a zone
-        Hooks.once('diceSoNiceRollStart', () => {
-            if (!_terrainRandomizerInZoneGen) {
-                game.dice3d.box.clearAll();
-                game.dice3d.box.scene.scale.x = 1;
-                game.dice3d.box.scene.scale.y = 1;
-                game.dice3d.box.scene.scale.z = 1;
+    <div>
+        <label for="tr-zone-count" style="margin-right:30px;">Area Size:</label>
+        <select id="tr-zone-count" style="margin-bottom:10px;width:260px"">
+            <option value="random" selected>Random</option>
+            <option value="upTo3">Up to 3 Zones</option>
+            <option value="upTo4">Up to 4 Zones</option>
+            <option value="upTo6">Up to 6 Zones</option>
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+        </select>
+    </div>
+
+    </form>
+    `
+    let dialogue = new Dialog({
+        title: `Zone Generator`,
+        content: zoneGenDialog,
+        buttons: {
+            submit: {
+                icon: '<i class="fas fa-dice"></i>',
+                label: 'Generate Zones',
+                callback: async () => {
+                    _terrainRandomizerInZoneGen = true;
+                    const oldHide = game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide;
+                    const oldForce = game.dice3d.box.throwingForce;
+                    // Terrain Randomizer relies on these scale values in order
+                    // to keep the dice closer to the center of the canvas
+                    const calculated = Math.log10(canvas.scene.dimensions.width)/8;
+                    game.dice3d.box.scene.scale.x = calculated;
+                    game.dice3d.box.scene.scale.y = calculated;
+                    game.dice3d.box.scene.scale.z = calculated;
+                    const zoneCount = $("#tr-zone-count").val();
+                    let content = '';
+                    let zones;
+                    switch (zoneCount) {
+                        case "random": {
+                            const areaSize = Roll.create('1d6');
+                            areaSize.roll({async: false});
+                            if (areaSize.total <= 3) {
+                                zones = Roll.create('1d3');
+                                zones.roll({async: false});
+                                content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
+                            } else if (areaSize.total <= 5) {
+                                zones = Roll.create('1d4');
+                                zones.roll({async: false});
+                                content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
+                            } else {
+                                zones = Roll.create('1d6');
+                                zones.roll({async: false});
+                                content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
+                            }
+                            break;
+                        }
+                        case "upTo3": {
+                            zones = Roll.create('1d3');
+                            zones.roll({async: false});
+                            content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
+                            break;
+                        }
+                        case "upTo4": {
+                            zones = Roll.create('1d4');
+                            zones.roll({async: false});
+                            content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
+                            break;
+                        }
+                        case "upTo6": {
+                            zones = Roll.create('1d6');
+                            zones.roll({async: false});
+                            content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
+                            break;
+                        }
+                        case "small": {
+                            zones = Roll.create('1d3');
+                            zones.roll({async: false});
+                            content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
+                            break;
+                        }
+                        case "medium": {
+                            zones = Roll.create('1d4+1');
+                            zones.roll({async: false});
+                            content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
+                            break;
+                        }
+                        case "large": {
+                            zones = Roll.create('1d3+3');
+                            zones.roll({async: false});
+                            content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
+                            break;
+                        }
+                    }
+
+                    function getSize() {
+                        const size = Roll.create('1d6');
+                        size.roll({async: false});
+                        if (size.total === 1)
+                            return 0
+                        else if (size.total === 6)
+                            return 2
+                        else
+                            return 1
+                    }
+
+                    let zoneSizes = [];
+                    for (let z = 0; z < zones.total; z++) {
+                        const zoneSize = getSize();
+                        if (zoneSize === 0)
+                            zoneSizes.push(2)
+                        else if (zoneSize === 1)
+                            zoneSizes.push(3)
+                        else
+                            zoneSizes.push(4)
+                    }
+                    let colors = ['red', 'green', 'blue', 'purple', 'black', 'orange'];
+                    let i = 1;
+                    game.dice3d.box.clearAll();
+                    game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide = 500000;
+                    game.dice3d.box.throwingForce = 'strong';
+                    zoneSizes.forEach(function (z) {
+                        let zoneRoll = Roll.create(`${z}d6`);
+                        let diceRoll = zoneRoll.roll({async: false});
+                        diceRoll.dice[0].options.appearance = {
+                            colorset: 'custom',
+                            background: colors[i-1],
+                            outline: colors[i-1],
+                            edge: colors[i-1],
+                            system: 'standard'
+                        }
+                        game.dice3d.showForRoll(zoneRoll).then(() => Hooks.call('diceSoNiceRollComplete'));
+                        content += `<span style="color:${colors[i - 1]}">Zone ${i}: ${z === 4 ? 'Large' : z === 3 ? 'Medium' : 'Small'} (${z} nodes)<br>`;
+                        i += 1;
+                    });
+                    const whisper = ui.chat.getData().rollMode !== 'roll' ? [game.user] : undefined;
+                    await ChatMessage.create({content: content, whisper: whisper});
+                    Hooks.once('diceSoNiceRollComplete', async () => {
+                        game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide = oldHide;
+                        game.dice3d.box.throwingForce = oldForce;
+                        const chatMsg = new ChatMessage({
+                            content: `<div><b>Draw zones!</b></div><button>Click to Hide Zone Dice</button>`,
+                            whisper: whisper
+                        });
+                        const popOutChat = Object.values(ui.windows).find(w => w.constructor.name === 'ChatLog');
+                        if (popOutChat) {
+                            const rollingFloatingHtml = await chatMsg.getHTML();
+                            popOutChat.element.find("#chat-log").append(rollingFloatingHtml);
+                            popOutChat.scrollBottom();
+                            rollingFloatingHtml.find('button').click(() => _trClearDice(rollingFloatingHtml));
+                        }
+                        const rollingHtml = await chatMsg.getHTML();
+                        ui.chat.element.find("#chat-log").append(rollingHtml);
+                        ui.chat.scrollBottom();
+                        rollingHtml.find('button').click(() => _trClearDice(rollingHtml));
+                        // on the next roll, restart scale if we are doing anything else than generating a zone
+                        Hooks.once('diceSoNiceRollStart', () => {
+                            if (!_terrainRandomizerInZoneGen) {
+                                game.dice3d.box.clearAll();
+                                game.dice3d.box.scene.scale.x = 1;
+                                game.dice3d.box.scene.scale.y = 1;
+                                game.dice3d.box.scene.scale.z = 1;
+                            }
+                            rollingHtml.remove();
+                        });
+                        _terrainRandomizerInZoneGen = false;
+                    });
+                }
             }
-            rollingHtml.remove();
-        });
-        _terrainRandomizerInZoneGen = false;
-    });
+        },
+        default: "submit"
+    })
+
+    dialogue.render(true)
 }
 
 function _trClearDice(chatHtml) {
@@ -121,8 +200,8 @@ async function terrainRandomizerHazardGen() {
     <form>
 
     <div>
-        <label for="decorationAmount" style="margin-right:30px;">How Many:</label>
-        <select name="decorationAmount" id="tr-deco-count" style="margin-bottom:10px;width:260px"">
+        <label for="tr-deco-count" style="margin-right:30px;">How Many:</label>
+        <select id="tr-deco-count" style="margin-bottom:10px;width:260px"">
             <option value="one" selected>Just One</option>
             <option value="simple">Simple (1d2)</option>
             <option value="medium">Medium (1d4)</option>
@@ -131,8 +210,8 @@ async function terrainRandomizerHazardGen() {
     </div>
 
     <div>
-        <label for="hazardGenerator" style="margin-right:19px;">Hazard Type:</label>
-        <select name="hazardGenerator" id="tr-hazard-gen" style="margin-bottom:10px;width:260px"">
+        <label for="tr-hazard-gen" style="margin-right:19px;">Hazard Type:</label>
+        <select id="tr-hazard-gen" style="margin-bottom:10px;width:260px"">
             <option value="table" selected>Random</option>
             <option value="Hazard">Hazard</option>
             <option value="Block">Block</option>
@@ -145,13 +224,13 @@ async function terrainRandomizerHazardGen() {
     </div>
 
     <div style="margin-bottom:5px;">
-        <label for="decoTable1">Random Table 1:</label>
-        <input name="decoTable1" id="tr-descriptor1-table" style="width:260px;" placeholder="Table Name">
+        <label for="tr-descriptor1-table">Random Table 1:</label>
+        <select id="tr-descriptor1-table" style="width:260px;"></select>
     </div>
 
     <div style="margin-bottom:5px;">
-        <label for="decoTable2">Random Table 2:</label>
-        <input name="decoTable2" id="tr-descriptor2-table" style="width:260px;" placeholder="Table Name">
+        <label for="tr-descriptor2-table">Random Table 2:</label>
+        <select id="tr-descriptor2-table" style="width:260px;"></select>
     </div>
 
     </form>
@@ -162,6 +241,13 @@ async function terrainRandomizerHazardGen() {
         render: (html) => {
             const table1 = game.user.getFlag('terrain-randomizer', 'tr-random-table-1');
             const table2 = game.user.getFlag('terrain-randomizer', 'tr-random-table-2');
+            const mythicTables = game.tables.contents.map(t => t.name);
+            const tableEntries1 = html.find('#tr-descriptor1-table');
+            const tableEntries2 = html.find('#tr-descriptor2-table');
+            mythicTables.forEach(t => {
+                tableEntries1.append(`<option value="${t}">${t}</option>`);
+                tableEntries2.append(`<option value="${t}">${t}</option>`);
+            });
             if (table1)
                 html.find("#tr-descriptor1-table").val(table1);
             if (table2)
@@ -169,8 +255,8 @@ async function terrainRandomizerHazardGen() {
         },
         buttons: {
             submit: {
-                icon: '<i class="fas fa-comments"></i>',
-                label: 'Generate Hazard',
+                icon: '<i class="fas fa-dice"></i>',
+                label: 'Generate Decorations',
                 callback: async (html) => {
                     const whisper = ui.chat.getData().rollMode !== 'roll' ? [game.user] : undefined;
                     let decoCount;
@@ -181,15 +267,15 @@ async function terrainRandomizerHazardGen() {
                             break;
                         }
                         case 'simple': {
-                            decoCount = Roll.create('1d2').roll({async: true}).total;
+                            decoCount = (await Roll.create('1d2').roll({async: true})).total;
                             break;
                         }
                         case 'medium': {
-                            decoCount = Roll.create('1d4').roll({async: true}).total;
+                            decoCount = (await Roll.create('1d4').roll({async: true})).total;
                             break;
                         }
                         case 'complex': {
-                            decoCount = Roll.create('1d6').roll({async: true}).total;
+                            decoCount = (await Roll.create('1d6').roll({async: true})).total;
                             break;
                         }
                     }

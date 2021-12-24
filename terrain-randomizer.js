@@ -14,7 +14,7 @@ async function terrainRandomizerZoneGen() {
     <form>
 
     <div>
-        <label for="tr-zone-count" style="margin-right:30px;">Area Size:</label>
+        <label for="tr-zone-count" style="margin-right:30px;">Area Layout:</label>
         <select id="tr-zone-count" style="margin-bottom:10px;width:260px"">
             <option value="random" selected>Random</option>
             <option value="upTo3">Up to 3 Zones</option>

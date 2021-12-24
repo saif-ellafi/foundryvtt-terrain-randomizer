@@ -86,7 +86,7 @@ async function terrainRandomizerZoneGen() {
                             break;
                         }
                         case "simple": {
-                            zones = Roll.create('1d3');
+                            zones = Roll.create('1d2+1');
                             zones.roll({async: false});
                             content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
                             break;

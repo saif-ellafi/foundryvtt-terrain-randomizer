@@ -1,5 +1,5 @@
 ### 1.2.0
-* Can now select random range for zones layout in zone generator
+* Can now select random range (with new options simple, complex, cluttered) for zones layout in zone generator
 * Use dropdowns for random table selection in decorations
 * Fixed a bug with random decorators
 * Adjusted 3D dice size based on the scene canvas size

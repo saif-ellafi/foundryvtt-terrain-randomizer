@@ -20,9 +20,9 @@ async function terrainRandomizerZoneGen() {
             <option value="upTo3">Up to 3 Zones</option>
             <option value="upTo4">Up to 4 Zones</option>
             <option value="upTo6">Up to 6 Zones</option>
-            <option value="small">Small</option>
-            <option value="medium">Medium</option>
-            <option value="large">Large</option>
+            <option value="simple">Simple</option>
+            <option value="complex">Complex</option>
+            <option value="clutter">Cluttered</option>
         </select>
     </div>
 
@@ -85,19 +85,19 @@ async function terrainRandomizerZoneGen() {
                             content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
                             break;
                         }
-                        case "small": {
+                        case "simple": {
                             zones = Roll.create('1d3');
                             zones.roll({async: false});
                             content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
                             break;
                         }
-                        case "medium": {
+                        case "complex": {
                             zones = Roll.create('1d4+1');
                             zones.roll({async: false});
                             content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
                             break;
                         }
-                        case "large": {
+                        case "clutter": {
                             zones = Roll.create('1d3+3');
                             zones.roll({async: false});
                             content += `<h2>Area Layout: ${zones.total} Zones</h2>`;

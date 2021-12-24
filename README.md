@@ -5,7 +5,7 @@
 Set of macros for playing
 with [The Terrain Randomizer](https://www.drivethrurpg.com/product/359218/The-Terrain-Randomizer) in FoundryVTT.
 
-The Terrain Randomizer is a booklet that offers a technique for coming up quickly with a concept of a map, for either a combat or a situation. It helps mapping elements to make sure it is interesting, and relies on DICE to draw the layout of the area, plus random tables to define random elements, hazards and challenges.
+The Terrain Randomizer is a booklet that offers a technique for coming up quickly with, or improvising a concept of a map, for either a combat, a region or a situation. It helps mapping elements to make sure it is interesting, and relies on DICE to draw the layout of the area, plus random tables to define random elements, hazards and challenges. Recommended also with [Mythic GME Tools](https://github.com/saif-ellafi/foundryvtt-mythic-gme)
 
 _Dynamically improvise interesting battle maps and situational maps for your RPG games with this procedural technique!
 The Terrain Randomizer book injects tactical depth with minimal player effort._

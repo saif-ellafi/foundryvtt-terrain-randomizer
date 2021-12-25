@@ -1,3 +1,10 @@
+### 1.2.1
+* Tweaked "Simple" Zone Generation random odds
+* Camera will automatically zoom out for matching the best position for 3D dice roll area
+* Freehand drawing mode will be selected by default on zone generation if no other drawing tool is currently selected
+* Added None as option to random tables
+* Fixed a few wrong text labels
+
 ### 1.2.0
 * Can now select random range (with new options simple, complex, cluttered) for zones layout in zone generator
 * Use dropdowns for random table selection in decorations

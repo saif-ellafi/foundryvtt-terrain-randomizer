@@ -7,14 +7,18 @@ with [The Terrain Randomizer](https://www.drivethrurpg.com/product/359218/The-Te
 
 The Terrain Randomizer is a booklet that offers a technique for coming up quickly with, or improvising a concept of a map, for either a combat, a region or a situation. It helps mapping elements to make sure it is interesting, and relies on DICE to draw the layout of the area, plus random tables to define random elements, hazards and challenges. Recommended also with [Mythic GME Tools](https://github.com/saif-ellafi/foundryvtt-mythic-gme)
 
-_Dynamically improvise interesting battle maps and situational maps for your RPG games with this procedural technique!
-The Terrain Randomizer book injects tactical depth with minimal player effort._
-
 ### [This module was made for free, for fun, and to share some of my small crazy ideas, plus coffee!](https://ko-fi.com/jeansenvaars)
 
 This implementation relies on [Dice so Nice!](https://foundryvtt.com/packages/dice-so-nice) as a module dependency
 
-![randomizer-example.gif](randomizer-example.gif)
+Drawing tool will be selected automatically and camera will zoom out for better matching with 3D dice roll area
+
+**Recommendations:**
+1. Use Foundry's free-form drawing tools and text tools to take notes
+2. Draw and proceed in the order zones as in the chat
+3. Use solid fill colors and separated colors for zones
+
+![randomizer-example.gif](randomizer-example2.gif)
 
 ## Crimson Scholar Press
 
@@ -36,11 +40,6 @@ and this module is redistributed with _appropriate permission from author_ **Jos
    2. Descriptor tables not included! You can use your own in 
 
 ![img_2.png](img_2.png)
-
-**Recommendations:** 
-1. Use Foundry's free-form drawing tools and text tools to take notes
-2. Draw and proceed in the order zones as in the chat
-3. Use solid fill colors and separated colors for zones
 
 ![example.png](example.png)
 

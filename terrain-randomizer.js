@@ -131,6 +131,11 @@ async function terrainRandomizerZoneGen() {
                     game.dice3d.box.clearAll();
                     game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide = 500000;
                     game.dice3d.box.throwingForce = 'strong';
+                    game.canvas.pan({
+                        x: game.canvas.scene.dimensions.width / 2,
+                        y: game.canvas.scene.dimensions.height / 2,
+                        scale: 0
+                    });
                     zoneSizes.forEach(function (z) {
                         let zoneRoll = Roll.create(`${z}d6`);
                         let diceRoll = zoneRoll.roll({async: false});
@@ -147,7 +152,11 @@ async function terrainRandomizerZoneGen() {
                     });
                     const whisper = ui.chat.getData().rollMode !== 'roll' ? [game.user] : undefined;
                     await ChatMessage.create({content: content, whisper: whisper});
+                    if (ui.controls.activeControl !== 'drawings')
+                        game.canvas.drawings.activate();
                     Hooks.once('diceSoNiceRollComplete', async () => {
+                        if (ui.controls.activeTool === 'select')
+                            $(".control-tool[data-tool='freehand']").click();
                         game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide = oldHide;
                         game.dice3d.box.throwingForce = oldForce;
                         const chatMsg = new ChatMessage({
@@ -225,12 +234,12 @@ async function terrainRandomizerHazardGen() {
 
     <div style="margin-bottom:5px;">
         <label for="tr-descriptor1-table">Random Table 1:</label>
-        <select id="tr-descriptor1-table" style="width:260px;"></select>
+        <select id="tr-descriptor1-table" style="width:260px;"><option>None</option></select>
     </div>
 
     <div style="margin-bottom:5px;">
         <label for="tr-descriptor2-table">Random Table 2:</label>
-        <select id="tr-descriptor2-table" style="width:260px;"></select>
+        <select id="tr-descriptor2-table" style="width:260px;"><option>None</option></select>
     </div>
 
     </form>

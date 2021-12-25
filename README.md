@@ -7,7 +7,8 @@ with [The Terrain Randomizer](https://www.drivethrurpg.com/product/359218/The-Te
 
 The Terrain Randomizer is a booklet that offers a technique for coming up quickly with, or improvising a concept of a map, for either a combat, a region or a situation. It helps mapping elements to make sure it is interesting, and relies on DICE to draw the layout of the area, plus random tables to define random elements, hazards and challenges. Recommended also with [Mythic GME Tools](https://github.com/saif-ellafi/foundryvtt-mythic-gme)
 
-### [This module was made for free, for fun, and to share some of my small crazy ideas, plus coffee!](https://ko-fi.com/jeansenvaars)
+#### [This module was made for free, with joy, long nights and crazy ideas, so tons of coffee :D!](https://ko-fi.com/jeansenvaars)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/V7V14D3AH)
 
 This implementation relies on [Dice so Nice!](https://foundryvtt.com/packages/dice-so-nice) as a module dependency
 

@@ -1,14 +1,13 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/saif-ellafi/foundryvtt-terrain-randomizer/total?logo=GitHub) ![GitHub release (latest by date)](https://img.shields.io/github/downloads/saif-ellafi/foundryvtt-terrain-randomizer/latest/total) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/saif-ellafi/foundryvtt-terrain-randomizer) ![GitHub issues](https://img.shields.io/github/issues-raw/saif-ellafi/foundryvtt-terrain-randomizer)
 # Terrain Randomizer for FoundryVTT
+### _Created by: JeansenVaars_ - [Invite me to a Coffee](https://ko-fi.com/jeansenvaars) :) if you enjoy this module!
 
 Set of macros for playing
 with [The Terrain Randomizer](https://www.drivethrurpg.com/product/359218/The-Terrain-Randomizer) in FoundryVTT.
 
 The Terrain Randomizer is a booklet that offers a technique for coming up quickly with, or improvising a concept of a map, for either a combat, a region or a situation. It helps mapping elements to make sure it is interesting, and relies on DICE to draw the layout of the area, plus random tables to define random elements, hazards and challenges. Recommended also with [Mythic GME Tools](https://github.com/saif-ellafi/foundryvtt-mythic-gme)
 
-### _Created by: JeansenVaars_
-#### [This module was made for free, with joy, long nights and crazy ideas, so tons of coffee :D!](https://ko-fi.com/jeansenvaars)
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/V7V14D3AH)
+### [This module was made for free, for fun, and to share some of my small crazy ideas, plus coffee!](https://ko-fi.com/jeansenvaars)
 
 This implementation relies on [Dice so Nice!](https://foundryvtt.com/packages/dice-so-nice) as a module dependency
 
@@ -38,7 +37,7 @@ and this module is redistributed with _appropriate permission from author_ **Jos
    3. Use your imagination for the elevations :)
 2. Decoration generator that produces detailed hazards, blocks and other challenges for your zones!
    1. Following Decoration creation, the Decorations Macro will produce Zone features automatically!
-   2. Descriptor tables not included! You can use your own in 
+   2. Descriptor tables not included! You can use your own in
 
 ![img_2.png](img_2.png)
 
@@ -56,7 +55,7 @@ and this module is redistributed with _appropriate permission from author_ **Jos
 
 1. Install this module through the FoundryVTT Module Installer
 2. Enable the module in your world
-3. Open compendiums and drag The Terrain Randomizer macros into your hotbar! 
+3. Open compendiums and drag The Terrain Randomizer macros into your hotbar!
 
 **CUSTOMIZATION** - Macros use RollTable by a strict name. Import the tables from the compendium and customize them, and will be automatically used, so long the names are not changed!
 

@@ -1,3 +1,6 @@
+### 1.2.2
+* Zone Generator now allows selecting dice type (d2, d4, d10, etc)
+
 ### 1.2.1
 * Tweaked "Simple" Zone Generation random odds
 * Camera will automatically zoom out for matching the best position for 3D dice roll area

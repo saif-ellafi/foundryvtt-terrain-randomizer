@@ -25,6 +25,21 @@ async function terrainRandomizerZoneGen() {
             <option value="clutter">Cluttered</option>
         </select>
     </div>
+    
+    <div>
+       <label for="tr-dice-type" style="margin-right:30px;">Dice Type:</label>
+        <select id="tr-dice-type" style="margin-bottom:10px;width:260px"">
+            <option value="d2">d2</option>
+            <option value="d4">d4</option>
+            <option value="d6" selected>d6</option>
+            <option value="d8">d8</option>
+            <option value="d10">d10</option>
+            <option value="d12">d12</option>
+            <option value="d20">d20</option>
+        </select> 
+    </div>
+    
+    <div><b>Hint:</b>  Be creative with dice numbers and their exact position! Obstacles, elevation, buildings, accesses, landmarks...</div>
 
     </form>
     `
@@ -126,6 +141,7 @@ async function terrainRandomizerZoneGen() {
                         else
                             zoneSizes.push(4)
                     }
+                    const dt = $("#tr-dice-type").val();
                     let colors = ['red', 'green', 'blue', 'purple', 'black', 'orange'];
                     let i = 1;
                     game.dice3d.box.clearAll();
@@ -137,7 +153,7 @@ async function terrainRandomizerZoneGen() {
                         scale: 0
                     });
                     zoneSizes.forEach(function (z) {
-                        let zoneRoll = Roll.create(`${z}d6`);
+                        let zoneRoll = Roll.create(`${z}${dt}`);
                         let diceRoll = zoneRoll.roll({async: false});
                         diceRoll.dice[0].options.appearance = {
                             colorset: 'custom',

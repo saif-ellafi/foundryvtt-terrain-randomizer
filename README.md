@@ -1,13 +1,14 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/saif-ellafi/foundryvtt-terrain-randomizer/total?logo=GitHub) ![GitHub release (latest by date)](https://img.shields.io/github/downloads/saif-ellafi/foundryvtt-terrain-randomizer/latest/total) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/saif-ellafi/foundryvtt-terrain-randomizer) ![GitHub issues](https://img.shields.io/github/issues-raw/saif-ellafi/foundryvtt-terrain-randomizer)
 # Terrain Randomizer for FoundryVTT
-### _Created by: JeansenVaars_ - [Invite me to a Coffee](https://ko-fi.com/jeansenvaars) :) if you enjoy this module!
 
 Set of macros for playing
 with [The Terrain Randomizer](https://www.drivethrurpg.com/product/359218/The-Terrain-Randomizer) in FoundryVTT.
 
 The Terrain Randomizer is a booklet that offers a technique for coming up quickly with, or improvising a concept of a map, for either a combat, a region or a situation. It helps mapping elements to make sure it is interesting, and relies on DICE to draw the layout of the area, plus random tables to define random elements, hazards and challenges. Recommended also with [Mythic GME Tools](https://github.com/saif-ellafi/foundryvtt-mythic-gme)
 
-### [This module was made for free, for fun, and to share some of my small crazy ideas, plus coffee!](https://ko-fi.com/jeansenvaars)
+### _Created by: JeansenVaars_
+#### [This module was made for free, with joy, long nights and crazy ideas, so tons of coffee :D!](https://ko-fi.com/jeansenvaars)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/V7V14D3AH)
 
 This implementation relies on [Dice so Nice!](https://foundryvtt.com/packages/dice-so-nice) as a module dependency
 

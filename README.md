@@ -19,7 +19,7 @@ Drawing tool will be selected automatically and camera will zoom out for better 
 2. Draw and proceed in the order zones as in the chat
 3. Use solid fill colors and separated colors for zones
 
-![randomizer-example.gif](randomizer-example2.gif)
+![example](example.gif)
 
 ## Crimson Scholar Press
 

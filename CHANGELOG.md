@@ -1,3 +1,8 @@
+### 1.3.0
+* Added Descriptors in the zone generator (as it always should have been)
+* Simplified some text styles
+* Fixed a bug where decoration message headers were publicly visible
+
 ### 1.2.2
 * Zone Generator now allows selecting dice type (d2, d4, d10, etc)
 

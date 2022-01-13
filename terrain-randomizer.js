@@ -1,4 +1,4 @@
-let _terrainRandomizerInZoneGen = false;
+let _trInZoneGen = false;
 
 async function terrainRandomizerZoneGen() {
     if (!game.dice3d) {
@@ -14,7 +14,7 @@ async function terrainRandomizerZoneGen() {
     <form>
 
     <div>
-        <label for="tr-zone-count" style="margin-right:30px;">Area Layout:</label>
+        <label for="tr-zone-count" style="margin-right:25px;">Area Layout:</label>
         <select id="tr-zone-count" style="margin-bottom:10px;width:260px"">
             <option value="random" selected>Random</option>
             <option value="upTo3">Up to 3 Zones</option>
@@ -24,6 +24,16 @@ async function terrainRandomizerZoneGen() {
             <option value="complex">Complex</option>
             <option value="clutter">Cluttered</option>
         </select>
+    </div>
+    
+    <div style="margin-bottom:5px;">
+        <label for="tr-descriptor1-table">Random Table 1:</label>
+        <select id="tr-descriptor1-table" style="width:260px;"><option>None</option></select>
+    </div>
+
+    <div style="margin-bottom:5px;">
+        <label for="tr-descriptor2-table">Random Table 2:</label>
+        <select id="tr-descriptor2-table" style="width:260px;"><option>None</option></select>
     </div>
     
     <div>
@@ -38,20 +48,33 @@ async function terrainRandomizerZoneGen() {
             <option value="d20">d20</option>
         </select> 
     </div>
-    
-    <div><b>Hint:</b>  Be creative with dice numbers and their exact position! Obstacles, elevation, buildings, accesses, landmarks...</div>
-
     </form>
     `
     let dialogue = new Dialog({
         title: `Zone Generator`,
         content: zoneGenDialog,
+        render: (html) => {
+            const table1 = game.user.getFlag('terrain-randomizer', 'tr-z-random-table-1');
+            const table2 = game.user.getFlag('terrain-randomizer', 'tr-z-random-table-2');
+            _trFillHtmlTables(html, table1, table2);
+            const lastDiceType = game.user.getFlag('terrain-randomizer', 'tr-dice-type');
+            if (lastDiceType)
+                $("#tr-dice-type").val(lastDiceType);
+        },
         buttons: {
             submit: {
                 icon: '<i class="fas fa-dice"></i>',
                 label: 'Generate Zones',
-                callback: async () => {
-                    _terrainRandomizerInZoneGen = true;
+                callback: async (html) => {
+                    const decoTable1name = html.find("#tr-descriptor1-table").val();
+                    const decoTable2name = html.find("#tr-descriptor2-table").val();
+                    const dt = $("#tr-dice-type").val();
+                    if (decoTable1name)
+                        game.user.setFlag('terrain-randomizer', 'tr-z-random-table-1', decoTable1name);
+                    if (decoTable2name)
+                        game.user.setFlag('terrain-randomizer', 'tr-z-random-table-2', decoTable2name);
+                    game.user.setFlag('terrain-randomizer', 'tr-dice-type', dt)
+                    _trInZoneGen = true;
                     const oldHide = game.user.getFlag('dice-so-nice', 'settings').timeBeforeHide;
                     const oldForce = game.dice3d.box.throwingForce;
                     // Terrain Randomizer relies on these scale values in order
@@ -141,7 +164,6 @@ async function terrainRandomizerZoneGen() {
                         else
                             zoneSizes.push(4)
                     }
-                    const dt = $("#tr-dice-type").val();
                     let colors = ['red', 'green', 'blue', 'purple', 'black', 'orange'];
                     let i = 1;
                     game.dice3d.box.clearAll();
@@ -152,7 +174,11 @@ async function terrainRandomizerZoneGen() {
                         y: game.canvas.scene.dimensions.height / 2,
                         scale: 0
                     });
-                    zoneSizes.forEach(function (z) {
+                    for (const z of zoneSizes) {
+                        let table1output;
+                        let table2output;
+                        table1output = (await game.tables.contents.find(t => t.name === decoTable1name?.trim())?.draw({displayChat: false}))?.results[0].getChatText();
+                        table2output = (await game.tables.contents.find(t => t.name === decoTable2name?.trim())?.draw({displayChat: false}))?.results[0].getChatText();
                         let zoneRoll = Roll.create(`${z}${dt}`);
                         let diceRoll = zoneRoll.roll({async: false});
                         diceRoll.dice[0].options.appearance = {
@@ -163,9 +189,13 @@ async function terrainRandomizerZoneGen() {
                             system: 'standard'
                         }
                         game.dice3d.showForRoll(zoneRoll).then(() => Hooks.call('diceSoNiceRollComplete'));
-                        content += `<span style="color:${colors[i - 1]}">Zone ${i}: ${z === 4 ? 'Large' : z === 3 ? 'Medium' : 'Small'} (${z} nodes)<br>`;
+                        content += `<div style="color:${colors[i - 1]}">Zone ${i}: ${z === 4 ? 'Large' : z === 3 ? 'Medium' : 'Small'}
+                            (${z} nodes - score ${diceRoll.total})
+                            ${table1output ? `<div>- ${table1output}</div>` : ''}
+                            ${table2output ? `<div>- ${table2output}</div>` : ''}
+                        </div>${i < zoneSizes.length ? '<br>' : ''}`;
                         i += 1;
-                    });
+                    }
                     const whisper = ui.chat.getData().rollMode !== 'roll' ? [game.user] : undefined;
                     await ChatMessage.create({content: content, whisper: whisper});
                     if (ui.controls.activeControl !== 'drawings')
@@ -192,7 +222,7 @@ async function terrainRandomizerZoneGen() {
                         rollingHtml.find('button').click(() => _trClearDice(rollingHtml));
                         // on the next roll, restart scale if we are doing anything else than generating a zone
                         Hooks.once('diceSoNiceRollStart', () => {
-                            if (!_terrainRandomizerInZoneGen) {
+                            if (!_trInZoneGen) {
                                 game.dice3d.box.clearAll();
                                 game.dice3d.box.scene.scale.x = 1;
                                 game.dice3d.box.scene.scale.y = 1;
@@ -200,7 +230,7 @@ async function terrainRandomizerZoneGen() {
                             }
                             rollingHtml.remove();
                         });
-                        _terrainRandomizerInZoneGen = false;
+                        _trInZoneGen = false;
                     });
                 }
             }
@@ -209,6 +239,21 @@ async function terrainRandomizerZoneGen() {
     })
 
     dialogue.render(true)
+}
+
+function _trFillHtmlTables(html, table1, table2) {
+    const mythicTables = game.tables.contents.map(t => t.name);
+    mythicTables.sort();
+    const tableEntries1 = html.find('#tr-descriptor1-table');
+    const tableEntries2 = html.find('#tr-descriptor2-table');
+    mythicTables.forEach(t => {
+        tableEntries1.append(`<option value="${t}">${t}</option>`);
+        tableEntries2.append(`<option value="${t}">${t}</option>`);
+    });
+    if (table1)
+        html.find("#tr-descriptor1-table").val(table1);
+    if (table2)
+        html.find("#tr-descriptor2-table").val(table2);
 }
 
 function _trClearDice(chatHtml) {
@@ -266,17 +311,7 @@ async function terrainRandomizerHazardGen() {
         render: (html) => {
             const table1 = game.user.getFlag('terrain-randomizer', 'tr-random-table-1');
             const table2 = game.user.getFlag('terrain-randomizer', 'tr-random-table-2');
-            const mythicTables = game.tables.contents.map(t => t.name);
-            const tableEntries1 = html.find('#tr-descriptor1-table');
-            const tableEntries2 = html.find('#tr-descriptor2-table');
-            mythicTables.forEach(t => {
-                tableEntries1.append(`<option value="${t}">${t}</option>`);
-                tableEntries2.append(`<option value="${t}">${t}</option>`);
-            });
-            if (table1)
-                html.find("#tr-descriptor1-table").val(table1);
-            if (table2)
-                html.find("#tr-descriptor2-table").val(table2);
+            _trFillHtmlTables(html, table1, table2);
         },
         buttons: {
             submit: {
@@ -308,26 +343,24 @@ async function terrainRandomizerHazardGen() {
                     const decoTypeChoice = html.find("#tr-hazard-gen").val();
                     const decoTable1name = html.find("#tr-descriptor1-table").val();
                     const decoTable2name = html.find("#tr-descriptor2-table").val();
-                    if (decoTable1name.length)
+                    if (decoTable1name)
                         game.user.setFlag('terrain-randomizer', 'tr-random-table-1', decoTable1name);
-                    if (decoTable2name.length)
+                    if (decoTable2name)
                         game.user.setFlag('terrain-randomizer', 'tr-random-table-2', decoTable2name);
 
                     let i = 0;
-                    ChatMessage.create({content: `Generating ${decoCount} Decorations!`});
+                    ChatMessage.create({content: `Generating ${decoCount} Decorations!`, whisper: whisper});
                     while (i < decoCount) {
                         i += 1;
                         let decoType;
-                        if (!decoTypeChoice?.length || decoTypeChoice === 'table')
+                        if (!decoTypeChoice || decoTypeChoice === 'table')
                             decoType = (await (await _trTableLookup('TR - Type')).roll()).results[0].getChatText();
                         else
                             decoType = decoTypeChoice;
                         let table1output;
                         let table2output;
-                        if (decoTable1name.length)
-                            table1output = (await game.tables.contents.find(t => t.name === decoTable1name.trim())?.draw({displayChat: false}))?.results[0].getChatText();
-                        if (decoTable2name.length)
-                            table2output = (await game.tables.contents.find(t => t.name === decoTable2name.trim())?.draw({displayChat: false}))?.results[0].getChatText();
+                        table1output = (await game.tables.contents.find(t => t.name === decoTable1name?.trim())?.draw({displayChat: false}))?.results[0].getChatText();
+                        table2output = (await game.tables.contents.find(t => t.name === decoTable2name?.trim())?.draw({displayChat: false}))?.results[0].getChatText();
                         ChatMessage.create({content: `
                         <h2>Zone Decoration (${i})</h2>
                         <div><u>${decoType}</u></div>
@@ -336,8 +369,8 @@ async function terrainRandomizerHazardGen() {
                         <div><b>That triggers</b>: ${(await (await _trTableLookup('TR - Temporality')).roll()).results[0].getChatText()}</div>
                         ${decoType.toLowerCase().includes('distraction') ? `<div><b>Distraction Type</b>: ${(await (await _trTableLookup('TR - Subtype')).roll()).results[0].getChatText()}</div>` : ''}
                         ${decoType.toLowerCase().includes('hazard') ? `<div><b>Hazard Special</b>: ${(await (await _trTableLookup('TR - Hazard')).roll()).results[0].getChatText()}</div>` : ''}
-                        ${table1output?.length ? `<div><b>Property 1:</b> ${table1output}</div>` : ''}
-                        ${table2output?.length ? `<div><b>Property 2:</b> ${table2output}</div>` : ''}
+                        ${table1output ? `<div>- ${table1output}</div>` : ''}
+                        ${table2output ? `<div>- ${table2output}</div>` : ''}
                     `, whisper: whisper})
                     }
                 }

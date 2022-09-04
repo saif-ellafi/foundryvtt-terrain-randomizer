@@ -1,6 +1,6 @@
 {
   "name": "foundryvtt-terrain-randomizer",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "A set of macros for playing with The Terrain Randomizer book with automated functions",
   "main": "terrain-randomizer.js",
   "scripts": {

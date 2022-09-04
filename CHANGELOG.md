@@ -1,3 +1,6 @@
+### 1.4.0
+* Support for Foundry V10 (retrocompatible)
+
 ### 1.3.0
 * Added Descriptors in the zone generator (as it always should have been)
 * Simplified some text styles

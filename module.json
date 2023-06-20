@@ -1,44 +1,59 @@
 {
-  "name": "terrain-randomizer",
+  "id": "terrain-randomizer",
   "title": "Terrain Randomizer",
   "description": "A set of macros for playing with 'The Terrain Randomizer' rules in an automated fashion",
   "authors": [
-    "JeansenVaars",
-    "José Manuel Navarro"
+    {
+      "name": "Saif Addin Ellafi",
+      "discord": "JeansenVaars#2857",
+      "ko-fi": "https://ko-fi.com/jeansenvaars"
+    },
+    {
+      "name": "Jose Manuel Navarro"
+    }
   ],
-  "version": "1.4.0",
+  "version": "1.5.0",
   "minimumCoreVersion": "0.8.9",
   "compatibleCoreVersion": "10",
   "compatibility": {
     "minimum": "0.8.9",
-    "verified": "10.284",
-    "maximum": "10"
+    "verified": "11.302",
+    "maximum": "11"
   },
   "url": "https://github.com/saif-ellafi/foundryvtt-terrain-randomizer.git",
   "manifest": "https://github.com/saif-ellafi/foundryvtt-terrain-randomizer/releases/latest/download/module.json",
-  "download": "https://github.com/saif-ellafi/foundryvtt-terrain-randomizer/releases/download/1.4.0/foundryvtt-terrain-randomizer_1.4.0.zip",
+  "download": "https://github.com/saif-ellafi/foundryvtt-terrain-randomizer/releases/download/1.5.0/foundryvtt-terrain-randomizer_1.5.0.zip",
   "scripts": [
     "terrain-randomizer.js"
   ],
-  "dependencies": [
-    {"name": "dice-so-nice"}
-  ],
+  "relationships": {
+    "requires":  [{
+      "id": "dice-so-nice",
+      "type": "module"
+    }]
+  },
   "packs": [
     {
       "name": "terrain-randomizer-tables",
       "label": "Terrain Randomizer Tables",
       "path": "packs/terrain-randomizer-tables.db",
       "module": "terrain-randomizer",
-      "entity": "RollTable",
-      "private": true
+      "type": "RollTable",
+      "ownership": {
+        "PLAYER": "NONE",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "terrain-randomizer-macros",
       "label": "Terrain Randomizer Macros",
       "path": "packs/terrain-randomizer-macros.db",
       "module": "terrain-randomizer",
-      "entity": "Macro",
-      "private": true
+      "type": "Macro",
+      "ownership": {
+        "PLAYER": "NONE",
+        "ASSISTANT": "OWNER"
+      }
     }
   ]
 }

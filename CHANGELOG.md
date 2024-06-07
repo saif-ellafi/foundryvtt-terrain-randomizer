@@ -1,3 +1,6 @@
+### 1.6.1
+* Proper support for Foundry V12
+
 ### 1.6.0
 * Support for Foundry V12
 

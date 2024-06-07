@@ -89,63 +89,63 @@ async function terrainRandomizerZoneGen() {
                     switch (zoneCount) {
                         case "random": {
                             const areaSize = Roll.create('1d6');
-                            areaSize.roll({async: false});
+                            await areaSize.roll();
                             if (areaSize.total <= 3) {
                                 zones = Roll.create('1d3');
-                                zones.roll({async: false});
+                                await zones.roll();
                                 content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
                             } else if (areaSize.total <= 5) {
                                 zones = Roll.create('1d4');
-                                zones.roll({async: false});
+                                await zones.roll();
                                 content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
                             } else {
                                 zones = Roll.create('1d6');
-                                zones.roll({async: false});
+                                await zones.roll();
                                 content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
                             }
                             break;
                         }
                         case "upTo3": {
                             zones = Roll.create('1d3');
-                            zones.roll({async: false});
+                            await zones.roll();
                             content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
                             break;
                         }
                         case "upTo4": {
                             zones = Roll.create('1d4');
-                            zones.roll({async: false});
+                            await zones.roll();
                             content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
                             break;
                         }
                         case "upTo6": {
                             zones = Roll.create('1d6');
-                            zones.roll({async: false});
+                            await zones.roll();
                             content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
                             break;
                         }
                         case "simple": {
                             zones = Roll.create('1d2+1');
-                            zones.roll({async: false});
+                            await zones.roll();
                             content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
                             break;
                         }
                         case "complex": {
                             zones = Roll.create('1d4+1');
-                            zones.roll({async: false});
+                            await zones.roll();
                             content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
                             break;
                         }
                         case "clutter": {
                             zones = Roll.create('1d3+3');
-                            zones.roll({async: false});
+                            await zones.roll();
                             content += `<h2>Area Layout: ${zones.total} Zones</h2>`;
                             break;
                         }
                     }
 
-                    function getSize() {
+                    async function getSize() {
                         const size = Roll.create('1d6');
-                        size.roll({async: false});
+                        await size.roll();
                         if (size.total === 1)
                             return 0
                         else if (size.total === 6)
@@ -156,7 +156,7 @@ async function terrainRandomizerZoneGen() {
 
                     let zoneSizes = [];
                     for (let z = 0; z < zones.total; z++) {
-                        const zoneSize = getSize();
+                        const zoneSize = await getSize();
                         if (zoneSize === 0)
                             zoneSizes.push(2)
                         else if (zoneSize === 1)
@@ -180,7 +180,7 @@ async function terrainRandomizerZoneGen() {
                         table1output = (await game.tables.contents.find(t => t.name === decoTable1name?.trim())?.draw({displayChat: false}))?.results[0].getChatText();
                         table2output = (await game.tables.contents.find(t => t.name === decoTable2name?.trim())?.draw({displayChat: false}))?.results[0].getChatText();
                         let zoneRoll = Roll.create(`${z}${dt}`);
-                        let diceRoll = zoneRoll.roll({async: false});
+                        let diceRoll = await zoneRoll.roll();
                         diceRoll.dice[0].options.appearance = {
                             colorset: 'custom',
                             background: colors[i-1],
